@@ -1,37 +1,15 @@
-// src/components/AddExpenseDialog.tsx
-
 'use client';
 
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { useState } from "react"; // <--- Add this import
+import { useState } from "react"; 
 
 import { Button } from "@/components/ui/button";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from '@/components/ui/form';
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
 const formSchema = z.object({
   vendor: z.string().min(2, { message: "Vendor must be at least 2 characters." }),
@@ -55,7 +33,6 @@ type AddExpenseDialogProps = {
 };
 
 export function AddExpenseDialog({ onAddExpense }: AddExpenseDialogProps) {
-  // New: Manage the dialog's open state explicitly
   const [open, setOpen] = useState(false);
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -71,15 +48,13 @@ export function AddExpenseDialog({ onAddExpense }: AddExpenseDialogProps) {
   function onSubmit(values: z.infer<typeof formSchema>) {
     onAddExpense(values);
     form.reset();
-    setOpen(false); // New: Close the dialog after submission
+    setOpen(false);
   }
 
   return (
-    // New: Pass the open state and a function to update it
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        {/* We can also add an onClick to the button to explicitly open it */}
-        <Button className="w-full">Add New Expense</Button>
+        <Button>Add New Expense</Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
