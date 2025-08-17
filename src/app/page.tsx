@@ -1,3 +1,4 @@
+import { AddExpenseDialog } from "@/components/ui/addExpenseDialog";
 import {Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 
@@ -12,11 +13,10 @@ export default function HomePage() {
           </CardDescription>
         </CardHeader>
         <CardContent>
-    ...  <div className="flex flex-col items-center gap-4">
+          <div className="flex flex-col items-center gap-4">
             <h2 className="text-xl text-center">No expenses to display.</h2>
-            <Button className="w-full">Add New Expense</Button>
+            <AddExpenseDialog />
           </div>
-
         </CardContent>
       </Card>
     </div>
