@@ -1,10 +1,12 @@
-// src/app/page.tsx
 'use client'; 
 
 import { useState, useMemo } from "react";
+import { AddExpenseDialog } from '@/components/addExpenseDialog';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { ExpenseTable } from "@/components/expenseTable";
-import { DashboardLayout } from "@/components/DashboardLayout"; 
+import { DashboardFilters } from "@/components/DashboardFilters";
+import { DashboardLayout } from "@/components/DashboardLayout";
+
 type Expense = {
   vendor: string;
   amount: number;
@@ -24,6 +26,7 @@ export default function HomePage() {
     if (!selectedDate) {
       return expenses;
     }
+
     return expenses.filter(expense => {
       const expenseDate = new Date(expense.date);
       return (
@@ -32,6 +35,11 @@ export default function HomePage() {
       );
     });
   }, [expenses, selectedDate]);
+
+  // New: Calculate the total expenses for the filtered list
+  const totalExpenses = useMemo(() => {
+    return filteredExpenses.reduce((sum, expense) => sum + expense.amount, 0);
+  }, [filteredExpenses]);
 
   return (
     <DashboardLayout 
@@ -56,6 +64,7 @@ export default function HomePage() {
           </CardContent>
         </Card>
       </div>
+
       <div className="md:col-span-1">
         <Card>
           <CardHeader>
@@ -65,7 +74,8 @@ export default function HomePage() {
           <CardContent>
             <div className="flex flex-col items-center gap-4 p-4">
                 <p>Total Expenses</p>
-                <h2 className="text-3xl font-bold">$0.00</h2>
+                {/* Fix: Display the calculated total */}
+                <h2 className="text-3xl font-bold">${totalExpenses.toFixed(2)}</h2>
                 <h3 className="mt-4 font-semibold">Spending by Category</h3>
                 <p className="text-center text-sm text-muted-foreground">
                     No expense data available. Add an expense or adjust filters.
