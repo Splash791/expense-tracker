@@ -1,4 +1,3 @@
-// src/components/DashboardFilters.tsx
 'use client';
 
 import * as React from 'react';

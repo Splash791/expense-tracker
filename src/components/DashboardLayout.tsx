@@ -1,4 +1,3 @@
-// src/components/DashboardLayout.tsx
 'use client';
 
 import { ReactNode } from 'react';
