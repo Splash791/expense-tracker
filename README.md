@@ -1,5 +1,7 @@
 # 💸 A Modern Expense Tracker  
 
+<img width="1916" height="993" alt="Screenshot 2025-08-30 at 11 34 51 AM" src="https://github.com/user-attachments/assets/72849d1f-de97-48e8-8f2e-1e158c7b0b5b" />
+
 
 ## 📖 Overview  
 
