@@ -1,4 +1,5 @@
 'use client';
+
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -28,7 +29,7 @@ const expenseCategories = [
 ];
 
 type AddExpenseDialogProps = {
-  onAddExpense: (newExpense: z.infer<typeof formSchema>) => void;
+  onAddExpense: (newExpense: any) => void;
 };
 
 export function AddExpenseDialog({ onAddExpense }: AddExpenseDialogProps) {
@@ -45,10 +46,24 @@ export function AddExpenseDialog({ onAddExpense }: AddExpenseDialogProps) {
     },
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    onAddExpense(values);
-    form.reset();
-    setOpen(false);
+  
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    const response = await fetch('/api/expenses', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(values),
+    });
+
+    if (response.ok) {
+      const newExpense = await response.json();
+      onAddExpense(newExpense); 
+      form.reset();
+      setOpen(false);
+    } else {
+      console.error('Failed to add expense');
+    }
   }
 
   const handleSwitchToScanner = () => {
@@ -60,7 +75,6 @@ export function AddExpenseDialog({ onAddExpense }: AddExpenseDialogProps) {
   };
   
   const handleScanComplete = (parsedData: any) => {
-    // fill the form fields with the parsed data
     form.reset({
       vendor: parsedData.vendor || '',
       amount: parsedData.amount || 0,
@@ -68,7 +82,6 @@ export function AddExpenseDialog({ onAddExpense }: AddExpenseDialogProps) {
       category: "",
     });
 
-    //switch back to the manual entry form
     setIsScanning(false);
   };
 

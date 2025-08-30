@@ -1,13 +1,17 @@
+// src/app/page.tsx
+
 'use client'; 
-import { useState, useMemo } from "react";
+
+import { useState, useMemo, useEffect } from "react";
 import { AddExpenseDialog } from '@/components/addExpenseDialog';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { ExpenseTable } from "@/components/expenseTable";
 import { DashboardFilters } from "@/components/DashboardFilters";
 import { DashboardLayout } from "@/components/DashboardLayout";
-import { SpendingPieChart } from "@/components/pieChart"; 
+import { SpendingPieChart } from "@/components/pieChart";
 
 type Expense = {
+  _id: string;
   vendor: string;
   amount: number;
   date: string;
@@ -17,9 +21,21 @@ type Expense = {
 export default function HomePage() {
   const [expenses, setExpenses] = useState<Expense[]>([]);
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(new Date());
+  const [loading, setLoading] = useState(true);
 
-  const handleAddExpense = (newExpense: Expense) => {
-    setExpenses((currentExpenses) => [...currentExpenses, newExpense]);
+  const fetchExpenses = async () => {
+    const response = await fetch('/api/expenses');
+    const data = await response.json();
+    setExpenses(data);
+    setLoading(false);
+  };
+
+  useEffect(() => {
+    fetchExpenses();
+  }, []);
+
+  const handleAddExpense = () => {
+    fetchExpenses();
   };
 
   const filteredExpenses = useMemo(() => {
@@ -48,11 +64,13 @@ export default function HomePage() {
       <div className="md:col-span-2">
         <Card>
           <CardHeader>
-            <CardTitle>Your Expenses</CardTitle>
-            <CardDescription>A list of your recent expenses.</CardDescription>
+          <CardTitle>Your Expenses</CardTitle>
+          <CardDescription>A list of your recent expenses.</CardDescription>
           </CardHeader>
           <CardContent>
-            {filteredExpenses.length === 0 ? (
+            {loading ? (
+              <p className="text-center">Loading expenses...</p>
+            ) : filteredExpenses.length === 0 ? (
               <div className="flex flex-col items-center gap-4 p-4 text-center">
                 <p>No results found.</p>
               </div>
