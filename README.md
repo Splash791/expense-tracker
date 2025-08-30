@@ -5,7 +5,7 @@
 
 ## 📖 Overview  
 
-**Expense Eye** is a modern personal finance web application that makes expense tracking simple and insightful.  
+**Expense Tracker** is a modern personal finance web application that makes expense tracking simple and insightful.  
 It combines manual entry with in-browser OCR (powered by **Tesseract.js**) to extract data from receipts, and presents expenses through a clean, responsive dashboard with dynamic filters and visualizations.  
 
 ## ✨ Features  
