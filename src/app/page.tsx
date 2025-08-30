@@ -1,7 +1,4 @@
-// src/app/page.tsx
-
 'use client'; 
-
 import { useState, useMemo, useEffect } from "react";
 import { AddExpenseDialog } from '@/components/addExpenseDialog';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -37,6 +34,18 @@ export default function HomePage() {
   const handleAddExpense = () => {
     fetchExpenses();
   };
+  
+  const handleDeleteExpense = async (id: string) => {
+    const response = await fetch(`/api/expenses?id=${id}`, {
+      method: 'DELETE',
+    });
+
+    if (response.ok) {
+      fetchExpenses(); 
+    } else {
+      console.error('Failed to delete expense');
+    }
+  };
 
   const filteredExpenses = useMemo(() => {
     if (!selectedDate) {
@@ -64,8 +73,8 @@ export default function HomePage() {
       <div className="md:col-span-2">
         <Card>
           <CardHeader>
-          <CardTitle>Your Expenses</CardTitle>
-          <CardDescription>A list of your recent expenses.</CardDescription>
+            <CardTitle>Your Expenses</CardTitle>
+            <CardDescription>A list of your recent expenses.</CardDescription>
           </CardHeader>
           <CardContent>
             {loading ? (
@@ -75,7 +84,7 @@ export default function HomePage() {
                 <p>No results found.</p>
               </div>
             ) : (
-              <ExpenseTable expenses={filteredExpenses} />
+              <ExpenseTable expenses={filteredExpenses} onDeleteExpense={handleDeleteExpense} />
             )}
           </CardContent>
         </Card>

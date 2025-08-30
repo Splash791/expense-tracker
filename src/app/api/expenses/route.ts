@@ -25,3 +25,25 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: 'Failed to create expense.' }, { status: 400 });
   }
 }
+
+export async function DELETE(req: Request) {
+    await dbConnect();
+    try {
+        const { searchParams } = new URL(req.url);
+        const id = searchParams.get('id');
+
+        if (!id) {
+            return NextResponse.json({ error: 'Missing expense ID.' }, { status: 400 });
+        }
+
+        const deletedExpense = await Expense.findByIdAndDelete(id);
+
+        if (!deletedExpense) {
+            return NextResponse.json({ error: 'Expense not found.' }, { status: 404 });
+        }
+
+        return NextResponse.json({ message: 'Expense deleted successfully.' }, { status: 200 });
+    } catch (error) {
+        return NextResponse.json({ error: 'Failed to delete expense.' }, { status: 500 });
+    }
+}
